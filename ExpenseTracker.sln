@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseTracker.Core", "Expe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseTracker.Infrastructure", "ExpenseTracker.Infrastructure\ExpenseTracker.Infrastructure.csproj", "{F76F797B-4F1A-4283-9CD4-AC1CAAE9767F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ExpenseTracker.Business", "ExpenseTracker.Business\ExpenseTracker.Business.csproj", "{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}"
+EndProject
 Global
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -58,5 +60,17 @@ Global
 		{F76F797B-4F1A-4283-9CD4-AC1CAAE9767F}.Release|x64.Build.0 = Release|Any CPU
 		{F76F797B-4F1A-4283-9CD4-AC1CAAE9767F}.Release|x86.ActiveCfg = Release|Any CPU
 		{F76F797B-4F1A-4283-9CD4-AC1CAAE9767F}.Release|x86.Build.0 = Release|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Debug|x64.Build.0 = Debug|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Debug|x86.Build.0 = Debug|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Release|x64.ActiveCfg = Release|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Release|x64.Build.0 = Release|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Release|x86.ActiveCfg = Release|Any CPU
+		{7340B6D3-5F49-48A0-9D2A-6C4B84BC8238}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
