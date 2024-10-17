@@ -1,15 +1,15 @@
 using ExpenseTracker.Infrastructure;
+using ExpenseTracker.Business;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddControllersWithViews();
 
 var configuration = builder.Configuration;
 
 //Register layers dependencies
 builder.Services.RegisterInfrastructureServices(configuration);
-
+builder.Services.RegisterBusinessServices();
 
 
 var app = builder.Build();

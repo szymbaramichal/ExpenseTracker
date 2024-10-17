@@ -1,6 +1,6 @@
 using System.Diagnostics;
+using ExpenseTracker.Business.Models.Errors;
 using Microsoft.AspNetCore.Mvc;
-using ExpenseTracker.App.Models;
 
 namespace ExpenseTracker.App.Controllers;
 

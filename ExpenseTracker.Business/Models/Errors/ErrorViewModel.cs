@@ -1,4 +1,4 @@
-namespace ExpenseTracker.App.Models;
+namespace ExpenseTracker.Business.Models.Errors;
 
 public class ErrorViewModel
 {
