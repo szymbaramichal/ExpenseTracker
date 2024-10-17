@@ -1,3 +1,4 @@
+using ExpenseTracker.App.Helpers.Attributes;
 using ExpenseTracker.Business.Models.Users;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,24 +12,18 @@ namespace ExpenseTracker.App.Controllers
         }
 
         [HttpPost]
+        [ValidateModel]
         public IActionResult Login(LoginFormData model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model); 
-            }
 
             return RedirectToAction("Index", "Home");
         }
 
 
         [HttpPost]
+        [ValidateModel]
         public IActionResult Register(LoginFormData model)
         {
-            if (!ModelState.IsValid)
-            {
-                return View(model); 
-            }
 
             return RedirectToAction("Index", "Home");
         }
