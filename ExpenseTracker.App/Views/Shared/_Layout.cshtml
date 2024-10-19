@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using ExpenseTracker.Core.Constants;
+
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
@@ -7,6 +9,8 @@
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/ExpenseTracker.App.styles.css" asp-append-version="true" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons/font/bootstrap-icons.css" rel="stylesheet"/>
+
 </head>
 <body>
     <header>
@@ -17,6 +21,28 @@
                         aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
+                @if (Context.Session.GetString(SessionFields.USERNAME) is not null)
+                {
+                    <div class="collapse navbar-collapse">
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="familiesDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Your families
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="familiesDropdown">
+                                    @foreach (var family in ViewBag.FamiliesNames)
+                                    {
+                                        <li>
+                                            <a class="dropdown-item" asp-area="" asp-controller="Player" asp-action="FamilyDetails" asp-route-id="@family.Id">
+                                                @family.Name
+                                            </a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                }
             </div>
         </nav>
     </header>

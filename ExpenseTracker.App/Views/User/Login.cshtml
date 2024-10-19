@@ -11,10 +11,17 @@
                 <div class="card-body">
                     <h3 class="card-title text-center mb-4">Let's log in!</h3>
                     <form method="post">
+                        @if (ViewBag.ErrorMessage != null)
+                        {
+                            <div class="alert alert-danger">
+                                @ViewBag.ErrorMessage
+                            </div>
+                        }
+
                         <div class="form-group mb-3">
-                            <label asp-for="Username" class="form-label"></label>
-                            <input asp-for="Username" class="form-control" placeholder="Type here your user name" />
-                            <span asp-validation-for="Username" class="text-danger"></span>
+                            <label asp-for="UserName" class="form-label"></label>
+                            <input asp-for="UserName" class="form-control" placeholder="Type here your user name" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
                         </div>
                         
                         <div class="form-group mb-3">

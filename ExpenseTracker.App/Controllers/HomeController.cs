@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using ExpenseTracker.Business.Models.Errors;
+using ExpenseTracker.Core.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.App.Controllers;
@@ -15,7 +16,14 @@ public class HomeController : Controller
 
     public IActionResult Index()
     {
-        return View("NotLoggedInIndex");
+        if(HttpContext.Session.GetString(SessionFields.USERNAME) != null)
+        {
+            return View("LoggedInIndex");
+        }
+        else
+        {
+            return View("NotLoggedInIndex");
+        }
     }
 
     public IActionResult Privacy()

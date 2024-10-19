@@ -1,4 +1,5 @@
 using ExpenseTracker.Infrastructure.Persistence;
+using ExpenseTracker.Infrastructure.Repositories.UserRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,6 +14,9 @@ public static class InfrastructureServiceRegistration
         services.AddDbContext<DataContext>(opt => {
             opt.UseSqlite(connectionString);
         });
+
+
+        services.AddTransient<IUserRepository, UserRepository>();
 
         return services;
     }

@@ -1,4 +1,6 @@
 using ExpenseTracker.Business.Models.Users;
+using ExpenseTracker.Business.Services.TokenService;
+using ExpenseTracker.Business.Services.UserService;
 using FluentValidation.AspNetCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -11,6 +13,9 @@ public static class BusinessServiceRegistration
         // TODO: remove deprecated methods
         services.AddFluentValidation(fv => 
                     fv.RegisterValidatorsFromAssemblyContaining<LoginFormData>());
+
+        services.AddTransient<IUserService, UserService>();
+        services.AddTransient<ITokenService, TokenService>();
         return services;
     }
 }

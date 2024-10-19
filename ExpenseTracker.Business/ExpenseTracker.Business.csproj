@@ -8,10 +8,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ExpenseTracker.Core\ExpenseTracker.Core.csproj" />
+    <ProjectReference Include="..\ExpenseTracker.Infrastructure\ExpenseTracker.Infrastructure.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="System.IdentityModel.Tokens.Jwt" Version="8.1.2" />
   </ItemGroup>
 
 </Project>
