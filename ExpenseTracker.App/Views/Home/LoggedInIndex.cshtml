@@ -1,18 +1,42 @@
 @using ExpenseTracker.Core.Constants;
 
 @{
-    ViewData["Title"] = "Welcome to ExpenseTracker";
+    ViewData["Title"] = "Main page";
 }
 
 <div class="container-fluid" style="padding: 0;">
     <div class="hero text-center text-white" style="background-color: #007bff; padding: 60px 0;">
-        <h2 class="display-4">Welcome, @Context.Session.GetString(SessionFields.USERNAME)👋</h2>
-        <p class="lead">Start tracking your expenses and manage your 'expense families'</p>
+        <h2 class="display-4">Welcome, @Context.Session.GetString(SessionFields.USERNAME) 👋</h2>
+        <p class="lead">Start tracking your expenses and manage your 'expense families'.</p>
         <a href="@Url.Action("Profile", "Player")" class="btn btn-lg btn-light" style="border-radius: 30px; padding: 10px 30px;">
             ➡️ Let's browse your families ⬅️
         </a>
-    </div>
 
+        <!-- Dropdown and Create/Join button section -->
+        <div class="d-flex justify-content-center align-items-center mt-4">
+            <!-- Dropdown for selecting a family -->
+            <div class="dropdown me-3">
+                <button class="btn btn-light dropdown-toggle" type="button" id="familiesDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="border-radius: 30px; padding: 10px 30px;">
+                    Select a Family
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="familiesDropdown">
+                    @foreach (var family in ViewBag.FamiliesInfo)
+                    {
+                        <li>
+                            <a class="dropdown-item" asp-area="" asp-controller="Player" asp-action="FamilyDetails" asp-route-id="@family.Id">
+                                @family.Name
+                            </a>
+                        </li>
+                    }
+                </ul>
+            </div>
+
+            <!-- Button for Create/Join family -->
+            <a href="@Url.Action("CreateOrJoinFamily", "Family")" class="btn btn-light" style="border-radius: 30px; padding: 10px 30px;">
+                Create/Join Family
+            </a>
+        </div>
+    </div>
 
     <!-- Features section -->
     <div class="features container py-5">
@@ -41,4 +65,3 @@
         </div>
     </div>
 </div>
-

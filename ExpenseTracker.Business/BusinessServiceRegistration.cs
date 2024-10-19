@@ -1,4 +1,5 @@
 using ExpenseTracker.Business.Models.Users;
+using ExpenseTracker.Business.Services.FamilyService;
 using ExpenseTracker.Business.Services.TokenService;
 using ExpenseTracker.Business.Services.UserService;
 using FluentValidation.AspNetCore;
@@ -16,6 +17,8 @@ public static class BusinessServiceRegistration
 
         services.AddTransient<IUserService, UserService>();
         services.AddTransient<ITokenService, TokenService>();
+        services.AddTransient<IFamilyService, FamilyService>();
+
         return services;
     }
 }

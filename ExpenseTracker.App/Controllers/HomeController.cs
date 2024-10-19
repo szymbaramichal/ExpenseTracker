@@ -1,23 +1,21 @@
 using System.Diagnostics;
 using ExpenseTracker.Business.Models.Errors;
+using ExpenseTracker.Business.Services.FamilyService;
 using ExpenseTracker.Core.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.App.Controllers;
 
-public class HomeController : Controller
+public class HomeController(IFamilyService familyService) : Controller
 {
-    private readonly ILogger<HomeController> _logger;
 
-    public HomeController(ILogger<HomeController> logger)
+    public async Task<IActionResult> Index()
     {
-        _logger = logger;
-    }
-
-    public IActionResult Index()
-    {
-        if(HttpContext.Session.GetString(SessionFields.USERNAME) != null)
+        var userId = HttpContext.Session.GetString(SessionFields.ID);
+        if(userId is not null)
         {
+            var familiesInfo = await familyService.GetFamiliesInfoForUser(int.Parse(userId));
+            ViewBag.FamiliesInfo = familiesInfo.ResultModel;
             return View("LoggedInIndex");
         }
         else

@@ -6,6 +6,7 @@ namespace ExpenseTracker.Core.Entities;
 public class Family : BaseEntity
 {
     public string Description { get; set; } = default!;
+    public string Name { get; set; } = default!;
     
     public ICollection<UserFamily> UserFamilies { get; set; } = default!;
 

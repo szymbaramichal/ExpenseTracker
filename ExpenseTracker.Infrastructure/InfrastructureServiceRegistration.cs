@@ -1,4 +1,6 @@
+using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Infrastructure.Persistence;
+using ExpenseTracker.Infrastructure.Repositories.FamilyRepository;
 using ExpenseTracker.Infrastructure.Repositories.UserRepository;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -17,6 +19,7 @@ public static class InfrastructureServiceRegistration
 
 
         services.AddTransient<IUserRepository, UserRepository>();
+        services.AddTransient<IFamilyRepository, FamilyRepository>();
 
         return services;
     }
