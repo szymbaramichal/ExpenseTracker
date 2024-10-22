@@ -1,73 +1,204 @@
-@model int
+@model FamilyViewModel
 @using ExpenseTracker.Core.Constants
 
 @{
-    ViewData["Title"] = "Family Details";
-    var isOwner = Context.Session.GetString(SessionFields.USER_ROLE) == "Owner"; // Assuming role management
-    var familyId = Model; // Family Id passed from the controller
+    ViewData["Title"] = $"{Model.Name} - details";
 }
 
+<style>
+    body {
+        background-color: #f4f7fa;
+        color: #333;
+    }
+
+    .container {
+        max-width: 1200px;
+    }
+
+    h2 {
+        color: #4a4a4a;
+        font-weight: 600;
+    }
+
+    .card {
+        background-color: #fff;
+        border-radius: 15px;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        margin-bottom: 30px;
+    }
+
+    .card-header {
+        background-color: #007bff;
+        color: white;
+        padding: 15px;
+        border-top-left-radius: 15px;
+        border-top-right-radius: 15px;
+    }
+
+    .card-body {
+        padding: 30px;
+    }
+
+    .btn {
+        border-radius: 30px;
+        padding: 10px 20px;
+        transition: background-color 0.3s ease;
+    }
+
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+
+    .btn-success {
+        background-color: #28a745;
+        border-color: #28a745;
+    }
+
+    .btn-success:hover {
+        background-color: #218838;
+    }
+
+    .btn-warning {
+        background-color: #ffc107;
+        border-color: #ffc107;
+    }
+
+    .btn-danger {
+        background-color: #dc3545;
+        border-color: #dc3545;
+    }
+
+    table.table {
+        margin-top: 20px;
+    }
+
+    table.table thead th {
+        background-color: #007bff;
+        color: white;
+    }
+
+    table.table-striped tbody tr:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+
+    .badge {
+        border-radius: 10px;
+        padding: 5px 10px;
+        font-size: 0.9rem;
+    }
+
+    .badge-pending {
+        background-color: #ffc107;
+        color: #fff;
+    }
+
+    .badge-paid {
+        background-color: #28a745;
+        color: #fff;
+    }
+
+    .badge-overdue {
+        background-color: #dc3545;
+        color: #fff;
+    }
+
+    .debt-info {
+        font-size: 1.2rem;
+        background-color: #f8d7da;
+        padding: 15px;
+        border-radius: 10px;
+        color: #721c24;
+        text-align: center;
+    }
+</style>
+
 <div class="container my-5">
-    <!-- Section 1: List of Expenses -->
-    <h2 class="mb-4">Expenses</h2>
+    <h2 class="text-center mb-5">@Model.Name - Family Details</h2>
 
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h4>Family Expenses</h4>
-        @if (isOwner)
-        {
-            <a href="@Url.Action("AddExpense", "Expense", new { familyId })" class="btn btn-primary">
-                Add New Expense
-            </a>
-        }
-    </div>
-
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Item</th>
-                <th>Amount</th>
-                <th>Date</th>
-                <th>Paid By</th>
-                <th>Status</th>
-                @if (isOwner)
-                {
-                    <th>Actions</th>
-                }
-            </tr>
-        </thead>
-        <tbody>
-            <!-- This section would be filled with actual expenses from the model -->
-            <tr>
-                <td>Groceries</td>
-                <td>$50</td>
-                <td>2024-10-21</td>
-                <td>John Doe</td>
-                <td>Pending</td>
-                @if (isOwner)
-                {
-                    <td>
-                        <a href="@Url.Action("EditExpense", "Expense", new { expenseId = 1 })" class="btn btn-sm btn-warning">Edit</a>
-                        <a href="@Url.Action("DeleteExpense", "Expense", new { expenseId = 1 })" class="btn btn-sm btn-danger">Delete</a>
-                    </td>
-                }
-            </tr>
-            <!-- Add more rows based on the data -->
-        </tbody>
-    </table>
-
-    <!-- Section 2: Generate Invitation Code (Only for Owners) -->
-    @if (isOwner)
+    <!-- Error Message Section -->
+    @if (!string.IsNullOrEmpty(ViewBag.ErrorMessage))
     {
-        <div class="my-5">
-            <h2>Invitation Code</h2>
-            <p>Generate a code to invite new members to your family.</p>
-            <a href="@Url.Action("GenerateInvitationCode", "Family", new { familyId })" class="btn btn-success">Generate Invitation Code</a>
+        <div class="alert alert-danger" role="alert">
+            @ViewBag.ErrorMessage
+        </div>
+    }
+    else
+    {
+    <!-- Expenses Section -->
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h4>Family Expenses</h4>
+                <a href="@Url.Action("AddExpense", "Expense", new { Model.Id })" class="btn btn-secondary">
+                    Add New Expense
+                </a>
+            </div>
+            <div class="card-body">
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>Item</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                            <th>Paid By</th>
+                            <th>Status</th>
+                            @if (Model.IsUserOwner)
+                            {
+                                <th>Actions</th>
+                            }
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Groceries</td>
+                            <td>$50</td>
+                            <td>2024-10-21</td>
+                            <td>John Doe</td>
+                            <td><span class="badge badge-pending">Pending</span></td>
+                            @if (Model.IsUserOwner)
+                            {
+                                <td>
+                                    <a href="@Url.Action("EditExpense", "Expense", new { expenseId = 1 })" class="btn btn-sm btn-warning">Edit</a>
+                                    <a href="@Url.Action("DeleteExpense", "Expense", new { expenseId = 1 })" class="btn btn-sm btn-danger">Delete</a>
+                                </td>
+                            }
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Invitation Code Section -->
+        @if (Model.IsUserOwner)
+        {
+            <div class="card my-5">
+                <div class="card-header">
+                    <h4>Invitation Code</h4>
+                </div>
+                <div class="card-body">
+                    <p>Generate a code to invite new members to your family.</p>
+                    <a href="@Url.Action("GenerateInvitationCode", "Family", new { Model.Id })" class="btn btn-success">Generate Invitation Code</a>
+                </div>
+            </div>
+        }
+
+        <!-- Debt Information Section -->
+        <div class="card">
+            <div class="card-header">
+                <h4>Your Debt to the Family</h4>
+            </div>
+            <div class="card-body">
+                <div class="debt-info">
+                    You owe a total of <strong>$100</strong> to your family. Please settle your dues.
+                </div>
+            </div>
         </div>
     }
 
-    <!-- Section 3: Debt Information -->
-    <div class="my-5">
-        <h2>Your Debt to the Family</h2>
-        <p>You owe a total of <strong>$100</strong> to your family. Please settle your dues.</p>
-    </div>
+ 
 </div>

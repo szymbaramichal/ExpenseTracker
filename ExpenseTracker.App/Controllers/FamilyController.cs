@@ -23,7 +23,17 @@ public class FamilyController(IFamilyService familyService) : Controller
 
     public async Task<IActionResult> FamilyPage(int id)
     {
-        return View(id);
+        var userId = HttpContext.Session.GetString(SessionFields.ID);
+
+        var familyViewModel = await familyService.GetFamilyDetailsForUser(int.Parse(userId), id);
+        
+        if(!familyViewModel.IsValid)
+        {
+            ViewBag.ErrorMessage = familyViewModel.ErrorMessage;
+            return View();
+        }
+
+        return View(familyViewModel.ResultModel);
     }
 
     [HttpPost]
@@ -32,6 +42,12 @@ public class FamilyController(IFamilyService familyService) : Controller
     {
         var userId = HttpContext.Session.GetString(SessionFields.ID);
         var familyInfoModel = await familyService.CreateFamily(int.Parse(userId), model);
+
+        if(!familyInfoModel.IsValid)
+        {
+            ViewBag.ErrorMessage = familyInfoModel.ErrorMessage;
+            return View();
+        }
 
         return RedirectToAction(nameof(FamilyPage), "Family", new { id = familyInfoModel.ResultModel.Id });
     }
