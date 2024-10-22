@@ -14,6 +14,8 @@ var configuration = builder.Configuration;
 builder.Services.RegisterInfrastructureServices(configuration);
 builder.Services.RegisterBusinessServices();
 
+builder.Services.AddDistributedMemoryCache();
+
 //Register session
 builder.Services.AddSession();
 

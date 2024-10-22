@@ -8,6 +8,12 @@ namespace ExpenseTracker.Infrastructure.Repositories.FamilyRepository;
 
 public class FamilyRepository(DataContext dataContext) : BaseRepository<Family>(dataContext), IFamilyRepository
 {
+    public async Task AddUserToFamily(UserFamily userFamily)
+    {
+        await dataContext.UserFamilies.AddAsync(userFamily);
+        await dataContext.SaveChangesAsync();
+    }
+
     public async Task CreateFamily(Family family, int userId)
     {
         using var dbTransaction = await dataContext.Database.BeginTransactionAsync(); 
@@ -48,5 +54,10 @@ public class FamilyRepository(DataContext dataContext) : BaseRepository<Family>(
     public async Task<Family> GetFamilyWithUserIds(int familyId)
     {
         return await dataContext.Families.Include(x => x.UserFamilies).FirstOrDefaultAsync(x => x.Id == familyId);
+    }
+
+    public async Task<UserFamily> GetUserInfoForFamily(int familyId, int userId)
+    {
+        return await dataContext.UserFamilies.FirstOrDefaultAsync(x => x.FamilyId == familyId && x.UserId == userId);
     }
 }

@@ -8,4 +8,5 @@ public class FamilyViewModel
     public string Name { get; set; }
     public bool IsUserOwner { get; set; }
     public string Description { get; set; }
+    public string FamilyInvitationCode { get; set; }
 }

@@ -48,6 +48,13 @@
 
 <div class="container mt-5">
     <h1 class="text-center">Join or Create Your Family</h1>
+
+    @if(!string.IsNullOrEmpty(TempData["ErrorMessage"]?.ToString()))
+    {                            
+        <div class="alert alert-danger">
+            @TempData["ErrorMessage"].ToString()
+        </div>
+    }
     <div class="row">
         <!-- Left Block: Join Family -->
         <div class="col-md-6">
@@ -64,7 +71,7 @@
                                 <span class="input-group-text" style="border-radius: 30px 0 0 30px;">
                                     <i class="bi bi-key" style="color: #007bff;"></i>
                                 </span>
-                                <input asp-for="FamilyName" type="text" class="form-control" maxlength="6" required placeholder="Enter family code" style="border-radius: 0 30px 30px 0;" />
+                                <input asp-for="FamilyCode" type="text" class="form-control" maxlength="6" required placeholder="Enter family code" style="border-radius: 0 30px 30px 0;" />
                             </div>
                             <span asp-validation-for="FamilyCode" class="text-danger"></span>
                             <div class="form-text">Please enter a valid 6-digit code.</div>

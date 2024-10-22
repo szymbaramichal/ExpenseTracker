@@ -9,7 +9,7 @@ namespace ExpenseTracker.App.Controllers;
 
 public class FamilyController(IFamilyService familyService) : Controller
 {
-    public async Task<IActionResult> Index()
+    public IActionResult Index()
     {
         return View();
     }
@@ -18,7 +18,15 @@ public class FamilyController(IFamilyService familyService) : Controller
     [ValidateModel(ActionName = nameof(Index), ControllerName = "Family")]
     public async Task<IActionResult> JoinFamily(FamilyJoinCreationData model)
     {
-        return RedirectToAction("Privacy", "Home");
+        var userId = HttpContext.Session.GetString(SessionFields.ID);
+        var familyInfoModel = await familyService.JoinFamily(int.Parse(userId), model.FamilyCode);
+        if(!familyInfoModel.IsValid)
+        {
+            TempData["ErrorMessage"] = familyInfoModel.ErrorMessage;
+            return RedirectToAction(nameof(Index));
+        }
+
+        return RedirectToAction(nameof(FamilyPage), "Family", new { id = familyInfoModel.ResultModel.Id });
     }
 
     public async Task<IActionResult> FamilyPage(int id)
@@ -29,8 +37,8 @@ public class FamilyController(IFamilyService familyService) : Controller
         
         if(!familyViewModel.IsValid)
         {
-            ViewBag.ErrorMessage = familyViewModel.ErrorMessage;
-            return View();
+            TempData["ErrorMessage"] = familyViewModel.ErrorMessage;
+            return RedirectToAction(nameof(Index));
         }
 
         return View(familyViewModel.ResultModel);
@@ -45,9 +53,26 @@ public class FamilyController(IFamilyService familyService) : Controller
 
         if(!familyInfoModel.IsValid)
         {
-            ViewBag.ErrorMessage = familyInfoModel.ErrorMessage;
-            return View();
+            TempData["ErrorMessage"] = familyInfoModel.ErrorMessage;
+            return RedirectToAction(nameof(Index));
         }
+
+        return RedirectToAction(nameof(FamilyPage), "Family", new { id = familyInfoModel.ResultModel.Id });
+    }
+
+
+    public async Task<IActionResult> GenerateInvitationCode(int familyId)
+    {
+        var userId = HttpContext.Session.GetString(SessionFields.ID);
+        var familyInfoModel = await familyService.GenerateInvitationCode(familyId, int.Parse(userId));
+
+        if(!familyInfoModel.IsValid)
+        {
+            TempData["ErrorMessage"] = familyInfoModel.ErrorMessage;
+            return RedirectToAction(nameof(FamilyPage), "Family", new { id = familyId });
+        }
+
+        TempData["InvitationCode"] = familyInfoModel.ResultModel.FamilyInvitationCode;
 
         return RedirectToAction(nameof(FamilyPage), "Family", new { id = familyInfoModel.ResultModel.Id });
     }

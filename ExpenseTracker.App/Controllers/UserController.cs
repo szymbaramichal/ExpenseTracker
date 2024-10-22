@@ -14,6 +14,15 @@ namespace ExpenseTracker.App.Controllers
             return View();
         }
 
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Remove(SessionFields.USERNAME);
+            HttpContext.Session.Remove(SessionFields.ID);
+            HttpContext.Session.Remove(SessionFields.USER_ROLE);
+
+            return RedirectToAction("Index", "Home");
+        }
+
         [HttpPost]
         [ValidateModel]
         public async Task<IActionResult> Login(LoginFormData model)

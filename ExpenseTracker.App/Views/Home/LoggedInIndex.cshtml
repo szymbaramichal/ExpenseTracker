@@ -8,8 +8,8 @@
     <div class="hero text-center text-white" style="background-color: #007bff; padding: 60px 0;">
         <h2 class="display-4">Welcome, @Context.Session.GetString(SessionFields.USERNAME) 👋</h2>
         <p class="lead">Start tracking your expenses and manage your 'expense families'.</p>
-        <a href="@Url.Action("Profile", "Player")" class="btn btn-lg btn-light" style="border-radius: 30px; padding: 10px 30px;">
-            ➡️ Let's check your profile! ⬅️
+        <a href="@Url.Action("Logout", "User")" class="btn btn-lg btn-light" style="border-radius: 30px; padding: 10px 30px;">
+            ➡️ Let's check your profile! (currently logout) ⬅️
         </a>
 
         <div class="d-flex justify-content-center align-items-center mt-4">
