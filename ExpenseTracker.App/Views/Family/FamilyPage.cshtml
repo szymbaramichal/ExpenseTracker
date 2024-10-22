@@ -1,0 +1,73 @@
+@model int
+@using ExpenseTracker.Core.Constants
+
+@{
+    ViewData["Title"] = "Family Details";
+    var isOwner = Context.Session.GetString(SessionFields.USER_ROLE) == "Owner"; // Assuming role management
+    var familyId = Model; // Family Id passed from the controller
+}
+
+<div class="container my-5">
+    <!-- Section 1: List of Expenses -->
+    <h2 class="mb-4">Expenses</h2>
+
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h4>Family Expenses</h4>
+        @if (isOwner)
+        {
+            <a href="@Url.Action("AddExpense", "Expense", new { familyId })" class="btn btn-primary">
+                Add New Expense
+            </a>
+        }
+    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Item</th>
+                <th>Amount</th>
+                <th>Date</th>
+                <th>Paid By</th>
+                <th>Status</th>
+                @if (isOwner)
+                {
+                    <th>Actions</th>
+                }
+            </tr>
+        </thead>
+        <tbody>
+            <!-- This section would be filled with actual expenses from the model -->
+            <tr>
+                <td>Groceries</td>
+                <td>$50</td>
+                <td>2024-10-21</td>
+                <td>John Doe</td>
+                <td>Pending</td>
+                @if (isOwner)
+                {
+                    <td>
+                        <a href="@Url.Action("EditExpense", "Expense", new { expenseId = 1 })" class="btn btn-sm btn-warning">Edit</a>
+                        <a href="@Url.Action("DeleteExpense", "Expense", new { expenseId = 1 })" class="btn btn-sm btn-danger">Delete</a>
+                    </td>
+                }
+            </tr>
+            <!-- Add more rows based on the data -->
+        </tbody>
+    </table>
+
+    <!-- Section 2: Generate Invitation Code (Only for Owners) -->
+    @if (isOwner)
+    {
+        <div class="my-5">
+            <h2>Invitation Code</h2>
+            <p>Generate a code to invite new members to your family.</p>
+            <a href="@Url.Action("GenerateInvitationCode", "Family", new { familyId })" class="btn btn-success">Generate Invitation Code</a>
+        </div>
+    }
+
+    <!-- Section 3: Debt Information -->
+    <div class="my-5">
+        <h2>Your Debt to the Family</h2>
+        <p>You owe a total of <strong>$100</strong> to your family. Please settle your dues.</p>
+    </div>
+</div>

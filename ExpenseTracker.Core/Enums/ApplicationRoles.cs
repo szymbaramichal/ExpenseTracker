@@ -1,6 +1,6 @@
 namespace ExpenseTracker.Core.Enums;
 
-public enum ApplicationRole
+public enum ApplicationRoles
 {
     None = 0,
     User = 1,

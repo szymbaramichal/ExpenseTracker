@@ -9,5 +9,5 @@ public class UserViewModel
     public string UserName { get; set; } = string.Empty;
     public string Email { get; set; } = string.Empty;    
     public string Description { get; set; } = string.Empty;
-    public string Role { get; set; } = nameof(ApplicationRole.User);
+    public string Role { get; set; } = nameof(ApplicationRoles.User);
 }

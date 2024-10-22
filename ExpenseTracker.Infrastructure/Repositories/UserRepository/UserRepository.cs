@@ -7,12 +7,10 @@ namespace ExpenseTracker.Infrastructure.Repositories.UserRepository;
 
 public class UserRepository(DataContext dataContext) : IUserRepository
 {
-    public async Task<User> AddUser(User user)
+    public async Task AddUser(User user)
     {
         await dataContext.AddAsync(user);
         await dataContext.SaveChangesAsync();
-
-        return user;
     }
 
     /// <returns>0 - something went wrong, 1 - ok</returns>
@@ -22,11 +20,9 @@ public class UserRepository(DataContext dataContext) : IUserRepository
         await dataContext.SaveChangesAsync();
     }
 
-    public async Task<User> EditUser(User user)
+    public async Task EditUser(User user)
     {
         await dataContext.SaveChangesAsync();
-    
-        return user;
     }
 
     public async Task<User> GetUser(int id)
