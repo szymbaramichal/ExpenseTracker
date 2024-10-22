@@ -133,9 +133,12 @@
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
                 <h4>Description</h4>
-                <a href="@Url.Action("Family", "Edit", new { Model.Id })" class="btn btn-secondary">
-                    Edit your family info / members
-                </a>
+                @if (Model.IsUserOwner)
+                {
+                    <a href="@Url.Action("Family", "Edit", new { Model.Id })" class="btn btn-secondary">
+                        Edit your family info / members
+                    </a>
+                }
             </div>
             <div class="card-body">
                 <p>
