@@ -12,14 +12,12 @@ public class UserService(IUserRepository userRepository, ITokenService tokenServ
 {
     public async Task<bool> IsUserNameTaken(string userName)
     {
-        var user = await userRepository.GetUser(userName);
-
-        return user == null ? true : false;
+        return await userRepository.IsUserNameTaken(userName);
     }
 
     public async Task<Result<LoginResponseData>> LoginUser(LoginFormData loginFormData)
     {
-        var user = await userRepository.GetUser(loginFormData.UserName);
+        var user = await userRepository.GetUserByUserName(loginFormData.UserName);
 
         if(user is null)
             return new Result<LoginResponseData>("Invalid login or password.", HttpStatusCode.BadRequest);
@@ -44,7 +42,7 @@ public class UserService(IUserRepository userRepository, ITokenService tokenServ
 
     public async Task<Result<LoginResponseData>> RegisterUser(LoginFormData loginFormData)
     {
-        var user = await userRepository.GetUser(loginFormData.UserName);
+        var user = await userRepository.GetUserByUserName(loginFormData.UserName);
 
         if(user is not null)
             return new Result<LoginResponseData>("Login already taken.", HttpStatusCode.BadRequest);
@@ -57,7 +55,7 @@ public class UserService(IUserRepository userRepository, ITokenService tokenServ
             PasswordSalt = hashAndSalt.Item2
         };
 
-        await userRepository.AddUser(newUser);
+        await userRepository.AddAsync(newUser);
 
         var token = tokenService.GenerateJwtToken(loginFormData.UserName);
         

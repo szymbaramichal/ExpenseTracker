@@ -1,6 +1,6 @@
-using System;
 using ExpenseTracker.Business.Models.Families;
 using ExpenseTracker.Core.Entities;
+using ExpenseTracker.Core.Enums;
 using ExpenseTracker.Core.Shared;
 using ExpenseTracker.Infrastructure.Repositories.FamilyRepository;
 using System.Net;
@@ -18,7 +18,7 @@ public class FamilyService(IFamilyRepository familyRepository) : IFamilyService
 
         try
         {
-            await familyRepository.Create(family, userId);
+            await familyRepository.CreateFamily(family, userId);
 
             var returnModel = new FamilyInfoModel {
                 Id = family.Id,
@@ -47,5 +47,27 @@ public class FamilyService(IFamilyRepository familyRepository) : IFamilyService
         }
 
         return new Result<ICollection<FamilyInfoModel>>(familyInfoModel);
+    }
+
+    public async Task<Result<FamilyViewModel>> GetFamilyDetailsForUser(int userId, int familyId)
+    {
+        var family = await familyRepository.GetFamilyWithUserIds(familyId);
+
+        if (family is null)
+            return new Result<FamilyViewModel>("Family doesn't exist", HttpStatusCode.BadRequest);
+
+        var userInFamilyDetails = family.UserFamilies.FirstOrDefault(x => x.UserId == userId);
+
+        if (userInFamilyDetails is null)
+            return new Result<FamilyViewModel>("Family doesn't exist", HttpStatusCode.BadRequest);
+
+        var familyViewModel = new FamilyViewModel {
+            Id = family.Id,
+            Description = family.Description,
+            Name = family.Name,
+            IsUserOwner = userInFamilyDetails.FamilyRole == nameof(FamilyRoles.Owner)
+        };
+
+        return new Result<FamilyViewModel>(familyViewModel);
     }
 }

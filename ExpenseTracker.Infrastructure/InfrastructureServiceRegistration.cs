@@ -1,4 +1,3 @@
-using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Infrastructure.Persistence;
 using ExpenseTracker.Infrastructure.Repositories.FamilyRepository;
 using ExpenseTracker.Infrastructure.Repositories.UserRepository;
@@ -16,7 +15,6 @@ public static class InfrastructureServiceRegistration
         services.AddDbContext<DataContext>(opt => {
             opt.UseSqlite(connectionString);
         });
-
 
         services.AddTransient<IUserRepository, UserRepository>();
         services.AddTransient<IFamilyRepository, FamilyRepository>();

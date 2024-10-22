@@ -1,13 +1,14 @@
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Enums;
 using ExpenseTracker.Infrastructure.Persistence;
+using ExpenseTracker.Infrastructure.Repositories.BaseRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Repositories.FamilyRepository;
 
-public class FamilyRepository(DataContext dataContext) : IFamilyRepository
+public class FamilyRepository(DataContext dataContext) : BaseRepository<Family>(dataContext), IFamilyRepository
 {
-    public async Task Create(Family family, int userId)
+    public async Task CreateFamily(Family family, int userId)
     {
         using var dbTransaction = await dataContext.Database.BeginTransactionAsync(); 
 
@@ -42,5 +43,10 @@ public class FamilyRepository(DataContext dataContext) : IFamilyRepository
             }).ToListAsync();
         
         return families.Select(x => (x.Name, x.Id)).ToList();
+    }
+
+    public async Task<Family> GetFamilyWithUserIds(int familyId)
+    {
+        return await dataContext.Families.Include(x => x.UserFamilies).FirstOrDefaultAsync(x => x.Id == familyId);
     }
 }

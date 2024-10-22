@@ -1,41 +1,19 @@
-using System;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Infrastructure.Persistence;
+using ExpenseTracker.Infrastructure.Repositories.BaseRepository;
 using Microsoft.EntityFrameworkCore;
 
 namespace ExpenseTracker.Infrastructure.Repositories.UserRepository;
 
-public class UserRepository(DataContext dataContext) : IUserRepository
+public class UserRepository(DataContext dataContext) : BaseRepository<User>(dataContext), IUserRepository
 {
-    public async Task AddUser(User user)
+    public async Task<User> GetUserByUserName(string userName)
     {
-        await dataContext.AddAsync(user);
-        await dataContext.SaveChangesAsync();
+        return await dataContext.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == userName.ToLower());
     }
 
-    /// <returns>0 - something went wrong, 1 - ok</returns>
-    public async Task DeleteUser(User user)
+    public async Task<bool> IsUserNameTaken(string userName)
     {
-        dataContext.Remove(user);
-        await dataContext.SaveChangesAsync();
-    }
-
-    public async Task EditUser(User user)
-    {
-        await dataContext.SaveChangesAsync();
-    }
-
-    public async Task<User> GetUser(int id)
-    {
-        var user = await dataContext.Users.FindAsync(id);
-        
-        return user!;
-    }
-
-    public async Task<User> GetUser(string userName)
-    {
-        var user = await dataContext.Users.FirstOrDefaultAsync(x => x.UserName.ToLower() == userName.ToLower());
-
-        return user!;
+        return await dataContext.Users.AnyAsync(x => x.UserName.ToLower() == userName.ToLower());
     }
 }
