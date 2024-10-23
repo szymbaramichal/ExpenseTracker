@@ -1,4 +1,6 @@
+using ExpenseTracker.Business.Helpers;
 using ExpenseTracker.Business.Models.Families;
+using ExpenseTracker.Business.Models.Users;
 using ExpenseTracker.Core.Entities;
 using ExpenseTracker.Core.Enums;
 using ExpenseTracker.Core.Shared;
@@ -34,7 +36,6 @@ public class FamilyService(IFamilyRepository familyRepository, IDistributedCache
         }
     }
 
-
     public async Task<Result<FamilyViewModel>> GenerateInvitationCode(int familyId, int userId)
     {
         var family = await familyRepository.GetFamilyWithUserIds(familyId);
@@ -47,7 +48,7 @@ public class FamilyService(IFamilyRepository familyRepository, IDistributedCache
         if (userInFamilyDetails is null || userInFamilyDetails.FamilyRole != nameof(FamilyRoles.Owner))
             return new Result<FamilyViewModel>("Family doesn't exist", HttpStatusCode.BadRequest);
 
-        string invitationCode = GenerateRandomCode();
+        string invitationCode = Randomizer.GenerateRandomCode();
 
         _cache.SetString(invitationCode, familyId.ToString(), new DistributedCacheEntryOptions {
             AbsoluteExpiration = DateTimeOffset.UtcNow.AddMinutes(2)
@@ -96,10 +97,29 @@ public class FamilyService(IFamilyRepository familyRepository, IDistributedCache
             Id = family.Id,
             Description = family.Description,
             Name = family.Name,
-            IsUserOwner = userInFamilyDetails.FamilyRole == nameof(FamilyRoles.Owner)
+            IsUserOwner = userInFamilyDetails.FamilyRole == nameof(FamilyRoles.Owner),
+            FamilyUsers = new List<UserInfoModel>()
         };
 
+        foreach (var userInfo in family.UserFamilies)
+        {
+            familyViewModel.FamilyUsers.Add(new () {
+                Id = userInfo.UserId,
+                UserName = userInfo.User.UserName
+            });
+        }
+
         return new Result<FamilyViewModel>(familyViewModel);
+    }
+
+    public async Task<bool> IsUserOwner(int userId, int familyId)
+    {
+        var userFamilyInfo = await familyRepository.GetUserInfoForFamily(familyId, userId);
+
+        if(userFamilyInfo is null)
+            return false;
+        
+        return userFamilyInfo.FamilyRole == nameof(FamilyRoles.Owner);
     }
 
     public async Task<Result<FamilyViewModel>> JoinFamily(int userId, string inviteCode)
@@ -135,19 +155,18 @@ public class FamilyService(IFamilyRepository familyRepository, IDistributedCache
         return new Result<FamilyViewModel>(familyViewModel);
     }
 
-    private string GenerateRandomCode(int length = 6)
+    public async Task RemoveUserFromFamily(int userId, int familyId)
     {
-        const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-        char[] result = new char[length];
+        var userFamilyInfo = await familyRepository.GetUserInfoForFamily(familyId, userId);
+    
+        await familyRepository.RemoveUserFromFamily(userFamilyInfo);
+    }
 
-        Random rnd = new Random();
+    public async Task UpdateFamilyDescription(int familyId, string description)
+    {
+        var family = await familyRepository.GetByIdAsync(familyId);
+        family.Description = description;
 
-        for(int i = 0; i < length; i++)
-        {
-            int indexNum = rnd.Next(0, 36);
-            result[i] = chars[indexNum];
-        }
-
-        return new string(result);
+        await familyRepository.UpdateAsync(family);
     }
 }

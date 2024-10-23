@@ -44,6 +44,20 @@ public class FamilyController(IFamilyService familyService) : Controller
         return View(familyViewModel.ResultModel);
     }
 
+    public async Task<IActionResult> RemoveUser(int userId, int familyId)
+    {
+        var currentUserId = int.Parse(HttpContext.Session.GetString(SessionFields.ID));
+
+        if (await familyService.IsUserOwner(currentUserId, familyId))
+        {
+            await familyService.RemoveUserFromFamily(userId, familyId);
+            
+            return RedirectToAction(nameof(FamilyPage), new { id = familyId });
+        }
+
+        return Unauthorized();
+    }
+
     [HttpPost]
     [ValidateModel(ActionName = nameof(Index), ControllerName = "Family")]
     public async Task<IActionResult> CreateFamily(FamilyJoinCreationData model)
@@ -75,5 +89,37 @@ public class FamilyController(IFamilyService familyService) : Controller
         TempData["InvitationCode"] = familyInfoModel.ResultModel.FamilyInvitationCode;
 
         return RedirectToAction(nameof(FamilyPage), "Family", new { id = familyInfoModel.ResultModel.Id });
+    }
+
+    public async Task<IActionResult> Description(int familyId)
+    {
+        var userId = HttpContext.Session.GetString(SessionFields.ID);
+        var family = await familyService.GetFamilyDetailsForUser(int.Parse(userId), familyId);
+        
+        if (family == null)
+        {
+            return NotFound();
+        }
+
+        var viewModel = new FamilyDescriptionViewModel
+        {
+            FamilyId = family.ResultModel.Id,
+            Description = family.ResultModel.Description
+        };
+
+        return View(viewModel);
+    }
+
+    [HttpPost]
+    public async Task<IActionResult> EditDescription(FamilyDescriptionViewModel model)
+    {
+        if (!ModelState.IsValid)
+        {
+            return View(model);
+        }
+
+        await familyService.UpdateFamilyDescription(model.FamilyId, model.Description);
+
+        return RedirectToAction(nameof(FamilyPage), new { id = model.FamilyId });
     }
 }

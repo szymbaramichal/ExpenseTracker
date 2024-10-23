@@ -3,6 +3,7 @@
 
 @{
     ViewData["Title"] = $"{Model.Name} - details";
+    var userId = Context.Session.GetString(SessionFields.ID);
 }
 
 <style>
@@ -135,8 +136,8 @@
                 <h4>Description</h4>
                 @if (Model.IsUserOwner)
                 {
-                    <a href="@Url.Action("Family", "Edit", new { Model.Id })" class="btn btn-secondary">
-                        Edit your family info / members
+                    <a href="@Url.Action("Description", "Family", new { familyId = Model.Id })" class="btn btn-secondary">
+                        Edit your family info
                     </a>
                 }
             </div>
@@ -146,6 +147,38 @@
                 </p>
             </div>
         </div>
+
+        @if(Model.IsUserOwner)
+        {
+            <div class="card mt-4">
+                <div class="card-header">
+                    <h4>Family Members</h4>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group">
+                        @foreach (var user in Model.FamilyUsers)
+                        {
+                            <li class="list-group-item d-flex justify-content-between align-items-center">
+                                <span>@user.UserName</span>
+                                <div>
+                                    <span class="badge bg-primary rounded-pill">ID: @user.Id</span>
+
+                                    @if(user.Id.ToString() != userId)
+                                    {
+                                        <a href="@Url.Action("RemoveUser", "Family", new { userId = user.Id, familyId = Model.Id })" 
+                                        class="btn btn-danger btn-sm ms-3"
+                                        onclick="return confirm('Are you sure you want to remove this user?');">
+                                            Remove
+                                        </a>
+                                    }
+                                </div>
+                            </li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        }
+
 
         <div class="card">
             <div class="card-header d-flex justify-content-between align-items-center">
@@ -189,7 +222,6 @@
             </div>
         </div>
 
-        <!-- Invitation Code Section -->
         @if (Model.IsUserOwner)
         {
             <div class="card my-5">
@@ -202,12 +234,14 @@
                     {
                         <h2><b>Your invitation code: @TempData["InvitationCode"].ToString()</b></h2>
                     }
-                    <a href="@Url.Action("GenerateInvitationCode", "Family", new { familyId = Model.Id })" class="btn btn-success">Generate Invitation Code</a>
+                    else
+                    {
+                        <a href="@Url.Action("GenerateInvitationCode", "Family", new { familyId = Model.Id })" class="btn btn-success">Generate Invitation Code</a>
+                    }
                 </div>
             </div>
         }
 
-        <!-- Debt Information Section -->
         <div class="card">
             <div class="card-header">
                 <h4>Your Debt to the Family</h4>

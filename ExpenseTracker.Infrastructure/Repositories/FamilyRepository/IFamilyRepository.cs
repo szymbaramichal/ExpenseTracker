@@ -10,4 +10,5 @@ public interface IFamilyRepository : IBaseRepository<Family>
     Task<Family> GetFamilyWithUserIds(int familyId);
     Task CreateFamily(Family family, int userId);
     Task AddUserToFamily(UserFamily userFamily);
+    Task RemoveUserFromFamily(UserFamily userFamily);
 }

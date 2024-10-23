@@ -11,4 +11,7 @@ public interface IFamilyService
     Task<Result<ICollection<FamilyInfoModel>>> GetFamiliesInfoForUser(int userId);
     Task<Result<FamilyViewModel>> GetFamilyDetailsForUser(int userId, int familyId);
     Task<Result<FamilyInfoModel>> CreateFamily(int userId, FamilyJoinCreationData familyCreationData);
+    Task<bool> IsUserOwner(int userId, int familyId);
+    Task RemoveUserFromFamily(int userId, int familyId);
+    Task UpdateFamilyDescription(int familyId, string description);
 }
