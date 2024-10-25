@@ -1,13 +1,14 @@
 using System;
 using ExpenseTracker.App.Helpers.Attributes;
 using ExpenseTracker.Business.Models.Families;
+using ExpenseTracker.Business.Services.ExpensesService;
 using ExpenseTracker.Business.Services.FamilyService;
 using ExpenseTracker.Core.Constants;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.App.Controllers;
 
-public class FamilyController(IFamilyService familyService) : Controller
+public class FamilyController(IFamilyService familyService, IExpensesService expensesService) : Controller
 {
     public IActionResult Index()
     {
@@ -40,6 +41,8 @@ public class FamilyController(IFamilyService familyService) : Controller
             TempData["ErrorMessage"] = familyViewModel.ErrorMessage;
             return RedirectToAction(nameof(Index));
         }
+
+        familyViewModel.ResultModel.Expenses = await expensesService.GetExpensesForFamily(id);
 
         return View(familyViewModel.ResultModel);
     }
