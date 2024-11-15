@@ -3,6 +3,7 @@ using ExpenseTracker.Business;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using ExpenseTracker.Core.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,7 +19,14 @@ builder.Services.RegisterBusinessServices();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Cache
 builder.Services.AddDistributedMemoryCache();
+
+//Register HttpClients
+builder.Services.AddHttpClient(HttpClientsNames.MarketClient, (provider, client) =>
+{
+    client.BaseAddress = new(configuration["Integrations:MarketApiBaseUrl"]!);
+});
 
 //Register session
 builder.Services.AddSession();

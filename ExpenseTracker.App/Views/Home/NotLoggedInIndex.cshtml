@@ -1,5 +1,7 @@
-﻿@{
-    ViewData["Title"] = "Welcome to ExpenseTracker";
+﻿@model StockDataModel
+
+@{
+ViewData["Title"] = "Welcome to ExpenseTracker";
 }
 
 <div class="container-fluid" style="padding: 0;">
@@ -33,6 +35,30 @@
                 </div>
                 <h3>Secure and Private</h3>
                 <p>Your data is encrypted and secured with industry-leading practices.</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tesla stock data as a fun fact -->
+    <div class="container py-5 bg-light">
+        <h3 class="text-center mb-4">📊 Fun Fact: Tesla Stock Highlights</h3>
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="p-4 border rounded shadow-sm">
+                    <h5 class="text-primary">Tesla's Performance (Last 10 Days)</h5>
+                    <p>Check out Tesla's recent stock data:</p>
+                    <ul class="list-unstyled">
+                        @foreach (var item in Model.Data.Take(3))
+                        {
+                        <li class="mb-3">
+                            <strong>Date:</strong> @item.Date.ToShortDateString() <br />
+                            <strong>Open:</strong> $@item.Open.ToString("F2"),
+                            <strong>Close:</strong> $@item.Close.ToString("F2"),
+                            <strong>Volume:</strong> @item.Volume.ToString("N0")
+                        </li>
+                        }
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
