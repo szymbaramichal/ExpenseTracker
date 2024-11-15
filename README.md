@@ -8,6 +8,7 @@ Witaj w **Expense Tracker**! Aplikacja umożliwia zarządzanie wydatkami w ramac
 - [🚀 Instalacja](#-instalacja)
 - [🔧 Konfiguracja](#-konfiguracja)
 - [📝 Instrukcja Użytkowania](#-instrukcja-użytkowania)
+- [📜 Swagger – Dokumentacja API](#-swagger--dokumentacja-api)
 
 ---
 
@@ -75,6 +76,28 @@ W pliku `appsettings.json` skonfiguruj połączenie z bazą danych:
 }
 ```
 
+### Integracja z API Marketstack
+
+Expense Tracker integruje się z zewnętrznym API **Marketstack**, które dostarcza danych o akcjach (np. Tesli). Aby aplikacja działała poprawnie, należy skonfigurować klucz API i adres bazowy przed pierwszym uruchomieniem.
+
+#### Aktualizacja `appsettings.json`
+W pliku `appsettings.json` dodaj swoje klucze integracyjne w sekcji `Integrations`:
+
+```json
+"Integrations": {
+    "MarketApiKey": "YOUR_API_KEY_HERE",
+    "MarketApiBaseUrl": "http://api.marketstack.com/v1/"
+}
+```
+
+- **MarketApiKey**: Twój unikalny klucz API, który otrzymasz po rejestracji w [Marketstack](https://marketstack.com/).
+- **MarketApiBaseUrl**: Podstawowy URL do zapytań API (standardowy: `http://api.marketstack.com/v1/`).
+
+Bez tej konfiguracji dane o akcjach nie będą dostępne w aplikacji.
+
+---
+
+
 ### Użytkownicy Testowi
 Na początek aplikacja zawiera domyślnych użytkowników testowych:
 - `TestUser1` / Hasło: `TestUser1`
@@ -109,3 +132,32 @@ Poniższa instrukcja opisuje użytkowanie aplikacji z perspektywy użytkownika.
 
 ### 6. **Śledzenie Salda i Długów**
    - Saldo lub dług każdego członka jest automatycznie obliczane, co ułatwia zarządzanie finansami.
+
+---
+
+## 📜 Swagger – Dokumentacja API
+
+Expense Tracker zawiera **Swagger**, który automatycznie generuje dokumentację API dostępnego w projekcie. To narzędzie pozwala na łatwe testowanie i eksplorację wszystkich dostępnych endpointów.
+
+### Jak uzyskać dostęp do Swaggera?
+
+1. Uruchom aplikację za pomocą:
+   ```bash
+   dotnet run
+   ```
+
+2. Otwórz przeglądarkę i przejdź pod adres:
+   ```
+   http://localhost:5000/swagger
+   ```
+
+3. Zobaczysz interfejs Swagger UI, gdzie można:
+    - Przeglądać wszystkie endpointy API.
+    - Testować endpointy bezpośrednio z przeglądarki.
+    - Sprawdzać szczegóły każdej metody, wymagane parametry i przykładowe odpowiedzi.
+
+### Dlaczego Swagger jest ważny?
+
+- **Dla deweloperów**: Ułatwia testowanie i debugowanie API.
+- **Dla dokumentacji**: Automatycznie generuje czytelne opisy endpointów.
+- **Dla integracji**: Pozwala na łatwe zrozumienie, jak korzystać z API w aplikacjach zewnętrznych.
