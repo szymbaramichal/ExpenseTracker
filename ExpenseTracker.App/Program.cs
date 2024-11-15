@@ -14,6 +14,10 @@ var configuration = builder.Configuration;
 builder.Services.RegisterInfrastructureServices(configuration);
 builder.Services.RegisterBusinessServices();
 
+//Swagger
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 builder.Services.AddDistributedMemoryCache();
 
 //Register session
@@ -21,6 +25,9 @@ builder.Services.AddSession();
 
 
 var app = builder.Build();
+app.UseSwagger();
+app.UseSwaggerUI();
+
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {

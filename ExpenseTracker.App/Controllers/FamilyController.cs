@@ -8,14 +8,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.App.Controllers;
 
+[Route("[controller]")]
 public class FamilyController(IFamilyService familyService, IExpensesService expensesService) : Controller
 {
+    [HttpGet]
     public IActionResult Index()
     {
         return View();
     }
 
-    [HttpPost]
+    [HttpPost("JoinFamily")]
     [ValidateModel(ActionName = nameof(Index), ControllerName = "Family")]
     public async Task<IActionResult> JoinFamily(FamilyJoinCreationData model)
     {
@@ -30,6 +32,7 @@ public class FamilyController(IFamilyService familyService, IExpensesService exp
         return RedirectToAction(nameof(FamilyPage), "Family", new { id = familyInfoModel.ResultModel.Id });
     }
 
+    [HttpGet("FamilyPage/{id}")]
     public async Task<IActionResult> FamilyPage(int id)
     {
         var userId = HttpContext.Session.GetString(SessionFields.ID);
@@ -47,6 +50,7 @@ public class FamilyController(IFamilyService familyService, IExpensesService exp
         return View(familyViewModel.ResultModel);
     }
 
+    [HttpGet("RemoveUser/{userId}/{familyId}")]
     public async Task<IActionResult> RemoveUser(int userId, int familyId)
     {
         var currentUserId = int.Parse(HttpContext.Session.GetString(SessionFields.ID));
@@ -61,7 +65,7 @@ public class FamilyController(IFamilyService familyService, IExpensesService exp
         return Unauthorized();
     }
 
-    [HttpPost]
+    [HttpPost("CreateFamily")]
     [ValidateModel(ActionName = nameof(Index), ControllerName = "Family")]
     public async Task<IActionResult> CreateFamily(FamilyJoinCreationData model)
     {
@@ -77,7 +81,7 @@ public class FamilyController(IFamilyService familyService, IExpensesService exp
         return RedirectToAction(nameof(FamilyPage), "Family", new { id = familyInfoModel.ResultModel.Id });
     }
 
-
+    [HttpGet("GenerateInvitationCode")]
     public async Task<IActionResult> GenerateInvitationCode(int familyId)
     {
         var userId = HttpContext.Session.GetString(SessionFields.ID);
@@ -93,7 +97,8 @@ public class FamilyController(IFamilyService familyService, IExpensesService exp
 
         return RedirectToAction(nameof(FamilyPage), "Family", new { id = familyInfoModel.ResultModel.Id });
     }
-
+    
+    [HttpGet("Description/{familyId}")]
     public async Task<IActionResult> Description(int familyId)
     {
         var userId = HttpContext.Session.GetString(SessionFields.ID);
@@ -113,7 +118,7 @@ public class FamilyController(IFamilyService familyService, IExpensesService exp
         return View(viewModel);
     }
 
-    [HttpPost]
+    [HttpPost("EditDescription")]
     public async Task<IActionResult> EditDescription(FamilyDescriptionViewModel model)
     {
         if (!ModelState.IsValid)

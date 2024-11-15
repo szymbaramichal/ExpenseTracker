@@ -7,13 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.App.Controllers
 {
+    [Route("[controller]")]
     public class UserController(IUserService userService) : Controller
     {
+        [HttpGet("Login")]
         public IActionResult Login()
         {
             return View();
         }
-
+        
+        [HttpGet("Logout")]
         public IActionResult Logout()
         {
             HttpContext.Session.Remove(SessionFields.USERNAME);
@@ -23,7 +26,7 @@ namespace ExpenseTracker.App.Controllers
             return RedirectToAction("Index", "Home");
         }
 
-        [HttpPost]
+        [HttpPost("Login")]
         [ValidateModel]
         public async Task<IActionResult> Login(LoginFormData model)
         {
@@ -40,7 +43,7 @@ namespace ExpenseTracker.App.Controllers
         }
 
 
-        [HttpPost]
+        [HttpPost("Register")]
         [ValidateModel]
         public async Task<IActionResult> Register(LoginFormData model)
         {

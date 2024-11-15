@@ -6,9 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ExpenseTracker.App.Controllers;
 
+[Route("[controller]")]
 public class ExpenseController(IExpensesService expensesService) : Controller
 {
-
+    [HttpGet("Add")]
     public IActionResult Add(int id)
     {
         var model = new ExpenseFormModel
@@ -20,7 +21,7 @@ public class ExpenseController(IExpensesService expensesService) : Controller
         return View(model);
     }
 
-    [HttpPost]
+    [HttpPost("AddExpense")]
     public async Task<IActionResult> AddExpense(ExpenseFormModel expenseFormModel)
     {
         await expensesService.AddExpenseToFamily(expenseFormModel);
